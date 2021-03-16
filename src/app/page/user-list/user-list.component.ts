@@ -10,13 +10,50 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class UserListComponent implements OnInit {
 
-  users$: Observable<User[]> = this.userService.getAll();
+  users$: Observable<User[]> = this.userService.userList$;
+  
+  // Selected User to delete
+  selectedItemToDelete: User = new User;
+
+  // Filter
+  filterPhrase: string = '';
+  filterKey: string = 'name';
+
+  // Sorter
+  sortby: string = 'id';
 
   constructor(
     private userService: UserService,
   ) { }
 
   ngOnInit(): void {
+    this.userService.getAll();
+    this.users$.subscribe(
+      //
+    );
   }
+
+  setToDelete(user: User): void {
+    this.selectedItemToDelete = user;
+  }
+
+  deleteItem(): void {
+    this.userService.remove(this.selectedItemToDelete).subscribe(
+      () => {
+        this.userService.getAll();
+      }
+    );
+  }
+
+  setSorter(param: string): void {
+    this.sortby = param;
+    const selectedHeader = document.querySelector('#header_'+param);
+    const tableHeaders = document.querySelectorAll('.table__header');
+    tableHeaders.forEach(element => {
+      element.classList.remove('table__header--active');
+    })
+    selectedHeader?.classList.add('table__header--active');
+  }
+
 
 }
