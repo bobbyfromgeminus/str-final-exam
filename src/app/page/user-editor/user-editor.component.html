@@ -1,7 +1,8 @@
 <div class="row">
   <div *ngIf="user$ | async as user" class="col-6 offset-3 mt-3">
 
-    <h2>Update / Create User</h2>
+    <h2 *ngIf="user.id==0" class="card-title mb-5">Create new User</h2>
+    <h2 *ngIf="user.id!=0" class="card-title mb-5">Edit User</h2>
 
     <form #userForm="ngForm" (ngSubmit)="onFormSubmit(userForm, user)">
       <input name="id" type="hidden" [(ngModel)]="user.id">
